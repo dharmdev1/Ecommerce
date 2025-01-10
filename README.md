@@ -1,1 +1,2 @@
-[EC-47] Add, update, and delete products (admin/vendor role)
+ git commit -m "EC-47 <Add, update, or delete products (admin/vendor role).>"
+
