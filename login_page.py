@@ -1,17 +1,19 @@
 from selenium.webdriver.common.by import By
-from .base_page import BasePage
+from selenium.webdriver.common.keys import Keys
+from base_page import BasePage
+import config
 
 
 class LoginPage(BasePage):
-    # Locators
-    USERNAME_FIELD = (By.ID, "email")
-    PASSWORD_FIELD = (By.ID, "passwd")
-    LOGIN_BUTTON = (By.NAME, "submitLogin")
+    def login(self):
+        # Navigate to the login page
+        self.driver.get(config.LOGIN_URL)
 
-    def login(self, username, password):
-        """
-        Logs into the application.
-        """
-        self.enter_text(self.USERNAME_FIELD, username)
-        self.enter_text(self.PASSWORD_FIELD, password)
-        self.click(self.LOGIN_BUTTON)
+        # Enter username and password
+        self.enter_text((By.ID, "email"), config.USERNAME)
+        self.enter_text((By.ID, "passwd"), config.PASSWORD)
+        self.driver.find_element(By.ID, "passwd").send_keys(Keys.RETURN)
+
+        # Verify login success
+        dashboard_element = self.wait_for_element((By.CLASS_NAME, "page-title"))
+        assert "Dashboard" in dashboard_element.text, "Login failed!"
